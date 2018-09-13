@@ -5,7 +5,6 @@ audio_dict = {
     'name' (key): ['path-to-file', (audio-length?), combo-length (numeric for seconds), 'combo text']
 }
 
-
 http://www.fromtexttospeech.com/ use Daisy or George
 """
 audio_dict = {
@@ -34,11 +33,33 @@ Functions for setting up round, maybe create list of moves to perform so that I 
 configuration file to pull data from, or at least a data structure in this file. Could move audio-dict there as well
 """
 
-while True: 
-    file = audio_dict[random.choice(list(audio_dict.keys()))][0]
-    pygame.mixer.init()
+# Get number of rounds desired
+#num_rounds = input("Desired Round Count: ")
+# Specify preset configuration or define a custom configuration in the config file
+
+# Countdown function to do a 3 2 1 Start sort of thing
+
+"""[Config Options]
+Length of rounds
+Moves to be included -> provide an editable key list to be used -> done as list of lists
+Length of "time units" compared to real time
+
+"""
+combo_count = 20
+current_count  = 0
+tick_weight = 1000
+pygame.mixer.init()
+
+while current_count < combo_count: 
+    combo = random.choice(list(audio_dict.keys()))
+    file = audio_dict[combo][0]
     pygame.mixer.music.load(file)
     pygame.mixer.music.play()
 
+    # Output current combo moves
+    print(audio_dict[combo][2])
+
     while pygame.mixer.music.get_busy(): 
-        pygame.time.Clock().tick(10)
+        pygame.time.Clock().tick(tick_weight*audio_dict[combo][1])
+    current_count += audio_dict[combo][1]
+    
