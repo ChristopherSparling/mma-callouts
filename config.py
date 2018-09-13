@@ -1,3 +1,4 @@
+import random
 """
 audio_dict = {
     'name' (key): ['path-to-file', (audio-length?), combo-length (numeric for seconds), 'combo text']
@@ -16,9 +17,16 @@ audio_dict = {
     'nine':     ['./audio-files/nine.mp3',    3, ''],
     'ten':      ['./audio-files/ten.mp3',     4, ''],
 }
-
+dict_keys = list(audio_dict.keys())
 # list of tips to be displayed below combo maybe
 tips_list = []
 
 # 180 seconds per round -> 3 minutes = standard round length
-round_length = 180 
+round_length = 20 
+# used to determine delays 
+time_weight = 1000
+time_const = time_weight/1000
+rest_length = 10
+# Return random combo
+def random_combo():
+    return random.choice(dict_keys)
