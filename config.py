@@ -17,10 +17,7 @@ audio_dict = {
     'nine':     ['./audio-files/nine.mp3',   1.5, 'Hook Cross Hook'],
     'ten':      ['./audio-files/ten.mp3',    1, 'Cross Hook'],
 }
-
-
 dict_keys = list(audio_dict.keys())
-
 # list of tips to be displayed below combo maybe
 tips_list = []
 
@@ -31,7 +28,6 @@ round_length = 10
 time_weight = 750
 time_const = time_weight/1000
 rest_length = 10
-
 go_threshold = 0.2
 go_length = 1
 # Return random combo
