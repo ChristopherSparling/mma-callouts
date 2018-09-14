@@ -3,9 +3,6 @@ import pygame.mixer
 import importlib
 import config as cf
 
-
-
-
 # Could make a gui but that sounds like work
 # Console prompts: number of rounds, number 
 
@@ -14,29 +11,40 @@ Functions for setting up round, maybe create list of moves to perform so that I 
     -> give a mode for known and unknown moves?
 configuration file to pull data from, or at least a data structure in this file. Could move audio-dict there as well
 """
+
 """
     Call out combo to perform
 """
 def callout(combo_list, countdown = False):
     for combo_key in combo_list:
+
         if countdown == False:
-            file = cf.audio_dict[combo_key][0] # get (relative) file path
+            file = cf.audio_dict[combo_key[0]][0] 
         else:
             file = combo_key
-        pygame.mixer.music.load(file)
-        pygame.mixer.music.play()
+        
+        play_clip(file)
 
-        while pygame.mixer.music.get_busy(): 
-            pygame.time.Clock().tick(10)
+        
             
         if countdown == False:
-            pygame.time.delay(cf.audio_dict[combo_key][1] * cf.time_weight)
+            pygame.time.delay(int(cf.audio_dict[combo_key[0]][1] * cf.time_weight))
         else:
             pygame.time.delay(1 * cf.time_weight)
  
-""" 
-    Generate list of combos for every round
-"""
+# Play relevant .mp3
+def play_clip(file):
+    pygame.mixer.music.load(file)
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy(): 
+            pygame.time.Clock().tick(10)
+
+# Decide based on threshold whether to include a kick
+def go_inject():
+    return random.randint(0,1) < cf.go_threshold
+
+ 
+# Generate list of combos for every round
 def round_setup(num_rounds):
     combo_set = []
 
@@ -44,19 +52,24 @@ def round_setup(num_rounds):
     for round in range(num_rounds):
         curr_length = 0 # time in seconds for current combo
         combo_set.append([])
-
+        move_count = 0
         # convert to seconds
         while cf.time_const * curr_length < cf.round_length:
+
             # should make a function to randomly choose a value instead of this
             new_combo = cf.random_combo()
-            combo_set[round].append(new_combo)
+            combo_set[round].append([new_combo, go_inject()])
             curr_length += cf.audio_dict[new_combo][1] * cf.time_const
+
+            # if a kick has been added, increase time accordingly
+            if combo_set[round][move_count][1]:
+                curr_length += cf.go_length * cf.time_const
+
+            move_count += 1 
     #print(combo_set)
     return combo_set
 
-"""
-    Perform starting countdown
-"""
+# Perform starting countdown
 def initial_count():
     countdown_paths = [ "./audio-files/three.mp3",
                         "./audio-files/two.mp3",
