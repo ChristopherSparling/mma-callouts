@@ -5,7 +5,7 @@ audio_dict = {
 }
 http://www.fromtexttospeech.com/ use Daisy or George
 """
-audio_dict = {
+basic_dict = {
     'one':      ['./audio-files/one.mp3',    1, 'Jab'],
     'two':      ['./audio-files/two.mp3',    1, 'Jab Cross'],
     'three':    ['./audio-files/three.mp3',  2, 'Jab Cross Hook'],
@@ -17,7 +17,6 @@ audio_dict = {
     'nine':     ['./audio-files/nine.mp3',   1.5, 'Hook Cross Hook'],
     'ten':      ['./audio-files/ten.mp3',    1, 'Cross Hook'],
 }
-dict_keys = list(audio_dict.keys())
 # list of tips to be displayed below combo maybe
 tips_list = []
 
@@ -30,6 +29,5 @@ time_const = time_weight/1000
 rest_length = 10
 go_threshold = 0.2
 go_length = 1
-# Return random combo
-def random_combo():
-    return random.choice(dict_keys)
+
+basic_rs_split = 0.5
