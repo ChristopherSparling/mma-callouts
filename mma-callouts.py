@@ -27,8 +27,8 @@ def callout(combo_list, countdown = False):
 
         # if kick should be appended
         if combo_key[1]:
-            pygame.time.delay(cf.go_length * cf.time_weight)
-            play_clip("./basic-files/go.mp3")
+            pygame.time.delay(cf.kick_length * cf.time_weight)
+            play_clip("./basic-files/" + combo_key[1] +".mp3")
             
         if countdown == False:
             pygame.time.delay(int(cf.basic_dict[combo_key[0]][1] * cf.time_weight))
@@ -43,8 +43,12 @@ def play_clip(file):
             pygame.time.Clock().tick(10)
 
 # Decide based on threshold whether to include a kick
-def go_inject():
-    return random.randint(0,1) < cf.go_threshold
+def kick_inject():
+    if random.randint(0,1) <= cf.kick_threshold:
+        if random.randint(0,1) < cf.go_sk_split: 
+            return "go"
+        return "switch-kick"
+    return False
 
  
 # Generate list of combos for every round
@@ -63,7 +67,7 @@ def round_setup(num_rounds):
 
             if basic_selected:
                 new_combo = random_combo(cf.basic_dict)
-                combo_set[round].append([new_combo, go_inject()]) # possibly add kick to basic combo
+                combo_set[round].append([new_combo, kick_inject()]) # possibly add kick to basic combo
                 curr_length += cf.basic_dict[new_combo][1] * cf.time_const
 
             else:
@@ -73,7 +77,7 @@ def round_setup(num_rounds):
             
             # if a kick has been added, increase time accordingly
             if combo_set[round][move_count][1]:
-                curr_length += cf.go_length * cf.time_const
+                curr_length += cf.kick_length * cf.time_const
 
             move_count += 1 
 
@@ -116,7 +120,7 @@ def round_breakdown(combo_set):
 # Print out moves for current combo
 def print_moves(combo_name,combo_moves):
    
-    print(combo_name[0].capitalize(), ": \t", combo_moves, ' Go' if combo_name[1] else '', sep='' )
+    print(combo_name[0].capitalize(), ": \t", combo_moves, " ", combo_name[1].capitalize() if combo_name[1] else '', sep='' )
 
 
 # Main execution
