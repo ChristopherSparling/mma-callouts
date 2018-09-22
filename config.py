@@ -21,13 +21,13 @@ basic_dict = {
 tips_list = []
 
 # 180 seconds per round -> 3 minutes = standard round length
-round_length = 10
+round_length = 180
 
 # used to determine delays 
-time_weight = 750
+time_weight = 875
 time_const = time_weight/1000
 rest_length = 10
-go_threshold = 0.2
+go_threshold = 0.6
 go_length = 1
 
-basic_rs_split = 0.5
+basic_rs_split = 0

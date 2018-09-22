@@ -4,15 +4,6 @@ import importlib
 import config as cf
 import riggs_system as rs
 
-# Could make a gui but that sounds like work
-# Console prompts: number of rounds, number 
-
-"""
-Functions for setting up round, maybe create list of moves to perform so that I can see the upcoming combo? Maybe that defeats the purpose.
-    -> give a mode for known and unknown moves?
-configuration file to pull data from, or at least a data structure in this file. Could move basic-dict there as well
-"""
-
 """
     Call out combo to perform
     @combo_list - [[move, go_bool], ...
@@ -20,16 +11,22 @@ configuration file to pull data from, or at least a data structure in this file.
 """
 def callout(combo_list, countdown = False):
     for combo_key in combo_list:
-
+        is_basic_dict = combo_key[0] in cf.basic_dict.keys()
         if countdown == False:
-            file = cf.basic_dict[combo_key[0]][0] 
+            if is_basic_dict:
+                file = cf.basic_dict[combo_key[0]][0]
+                print_moves(combo_key, cf.basic_dict[combo_key[0]][2])
+            else:
+                file = rs.rs_dict[combo_key[0]][0]
+                print_moves(combo_key, rs.rs_dict[combo_key[0]][2])
+
         else:
             file = combo_key
-        
+
         play_clip(file)
 
         # if kick should be appended
-        if cf.basic_dict[combo_key[0]][1]:
+        if combo_key[1]:
             pygame.time.delay(cf.go_length * cf.time_weight)
             play_clip("./basic-files/go.mp3")
             
@@ -67,13 +64,13 @@ def round_setup(num_rounds):
             if basic_selected:
                 new_combo = random_combo(cf.basic_dict)
                 combo_set[round].append([new_combo, go_inject()]) # possibly add kick to basic combo
+                curr_length += cf.basic_dict[new_combo][1] * cf.time_const
 
             else:
                 new_combo = random_combo(rs.rs_dict)
                 combo_set[round].append([new_combo, False]) # never add kick to rs combo
-
-            curr_length += cf.basic_dict[new_combo][1] * cf.time_const
-
+                curr_length += rs.rs_dict[new_combo][1] * cf.time_const
+            
             # if a kick has been added, increase time accordingly
             if combo_set[round][move_count][1]:
                 curr_length += cf.go_length * cf.time_const
@@ -95,17 +92,48 @@ def initial_count():
 def random_combo(combo_dict):
     return random.choice(list(combo_dict.keys()))
 
+# Return breakdown of previous round's combos
+def round_breakdown(combo_set):
+    tracking_dict = {}
+    
+    for combo in combo_set:
+        if combo[0] not in tracking_dict.keys():
+            tracking_dict[combo[0]] = 1
+        else:
+            tracking_dict[combo[0]] += 1
+    
+    i = 1
+    s = [(key, tracking_dict[key]) for key in sorted(tracking_dict, key=tracking_dict.get, reverse=True)]
+
+    for key, value in s:
+        print(key, ": ", value, end = '\t')
+        if i == 6:
+            print ('\r')
+            i = 0
+        i += 1
+    print()
+
+# Print out moves for current combo
+def print_moves(combo_name,combo_moves):
+   
+    print(combo_name[0].capitalize(), ": \t", combo_moves, ' Go' if combo_name[1] else '', sep='' )
+
+
 # Main execution
 def main():
     num_rounds = int(input("Enter Number of Rounds: "))
-
+    
     pygame.mixer.init()
-    initial_count()
+    #initial_count()
+    
     program = round_setup(num_rounds) # lists of combos
-    for round in range(num_rounds):
-        callout(program[round])
+    
+    round_breakdown(program[0])
+    for round in program:
+        callout(round)
         pygame.time.delay(cf.rest_length * cf.time_weight)
-
+    
+    """
     print("Now go to bed")
-
+    """
 main()
