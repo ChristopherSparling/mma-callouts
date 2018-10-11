@@ -44,7 +44,7 @@ def play_clip(file):
 
 # Decide based on threshold whether to include a kick
 def kick_inject():
-    if random.randint(0,1) <= cf.kick_threshold:
+    if random.randint(0,1) > cf.kick_threshold:
         if random.randint(0,1) < cf.go_sk_split: 
             return "go"
         return "switch-kick"
@@ -63,7 +63,7 @@ def round_setup(num_rounds):
         # convert to seconds
         while cf.time_const * curr_length < cf.round_length:
 
-            basic_selected = random.randint(0,1) >= cf.basic_rs_split
+            basic_selected = random.randint(0,1) <= cf.basic_rs_split
 
             if basic_selected:
                 new_combo = random_combo(cf.basic_dict)
