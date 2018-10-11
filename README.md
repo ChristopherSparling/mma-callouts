@@ -1,8 +1,10 @@
 # MMA Combo Assistant
+
 ### *Generates randomly ordered preset combos with configurable round lengths, added-in kicks, etc., and calls them out*
 
 When first attending MMA classes one of the things discussed was the ability to flow between moves. A set of combos numbered 1 to 10 that the coach [Terry Riggs](https://www.warriormma.ca/) has written out is used to help this, and introduces some structure to fighting for beginners. The combos are as follows:
 
+     
 1. *Jab*
 2. *Jab* **Cross**
 3. *Jab* **Cross** *Hook*
