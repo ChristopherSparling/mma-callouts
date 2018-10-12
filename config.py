@@ -32,4 +32,4 @@ kick_threshold = 0.5
 kick_length = 1
 go_sk_split = 0.5
 
-basic_rs_split = 0
+basic_rs_split = 1
