@@ -110,7 +110,7 @@ def round_breakdown(combo_set):
     s = [(key, tracking_dict[key]) for key in sorted(tracking_dict, key=tracking_dict.get, reverse=True)]
 
     for key, value in s:
-        print(key, ": ", value, end = '\t')
+        print(key, ": ", value, end='\t')
         if i == 6:
             print ('\r')
             i = 0
